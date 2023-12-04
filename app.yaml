@@ -1,1 +1,27 @@
-runtime: python311
+runtime: python
+api_version: '1'
+env: flex
+entrypoint: gunicorn -b :$PORT 'wsgi:app' --timeout 300 --workers 1
+runtime_config:
+    operating_system: "ubuntu22"
+    runtime_version: "3.10"
+# threadsafe: true
+# manual_scaling:
+#   instances: 12
+# resources:
+#   cpu: 6
+#   memory_gb: 32
+liveness_check:
+  path: "/health"
+  initial_delay_sec: '300'
+  check_interval_sec: '30'
+  timeout_sec: '4'
+  failure_threshold: 4
+  success_threshold: 2
+readiness_check:
+  path: "/ready"
+  check_interval_sec: '5'
+  timeout_sec: '4'
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: '300'
