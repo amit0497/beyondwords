@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+
+  app:
+    image: python:3.10-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: bash -c "pip install --no-cache-dir -r requirements.txt && gunicorn -b 0.0.0.0:8080 main:app"
